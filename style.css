@@ -1,7 +1,16 @@
-.trashwordFound {
-    color: red;
+body {
+    font-family: 'Poppins', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
 }
 
-.keywordFound {
-    color: green;
+#phrase_display {
+    font-family: 'Ubuntu Mono', monospace;
+}
+
+.trashword {
+    color: none;
+}
+
+.keyword {
+    color: none;
 }

@@ -5,6 +5,12 @@ body {
 
 #phrase_display {
     font-family: 'Ubuntu Mono', monospace;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+#phrase_display:hover {
+    cursor: pointer;
 }
 
 .trashword {
@@ -13,4 +19,8 @@ body {
 
 .keyword {
     color: none;
+}
+
+.disabled {
+    pointer-events: none;
 }

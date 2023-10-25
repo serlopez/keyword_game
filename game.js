@@ -2,8 +2,11 @@ let keywordNum = 0;
 let trashwordNum = 0;
 let score = 0;
 let questionIndex = 0;
-let count = 60;
+let count = 30;
 let timer;
+let scoreDisplay = document.getElementById("score");
+let phrase = document.getElementById("phrase_display");
+let lightsOff = false;
 
 let phrases = ['<p><span class="trashword">The</span> <span class="trashword">quick</span> <span class="trashword">brown</span> <span class="keyword">fox</span> <span class="keyword">jumps</span> <span class="keyword">over</span> <span class="trashword">the</span> <span class="trashword">lazy</span> <span class="keyword">dog</span>.</p>',
 '<p><span class="keyword">Pack</span> <span class="trashword">my</span> <span class="keyword">box</span> <span class="keyword">with</span> <span class="trashword">five</span> <span class="trashword">dozen</span> <span class="keyword">liquor</span> <span class="keyword">jugs</span>.</p>',
@@ -18,25 +21,44 @@ let phrases = ['<p><span class="trashword">The</span> <span class="trashword">qu
 '<p>Game Over!</p>'
 ];
 
+//button gets next phrase
 let button = document.getElementById("next_phrase");
 button.addEventListener('click', function(){
-    count = 60;
+    count = 30;
     game();
 });
 
+//hint button
 let hintButton = document.getElementById("hint");
 hintButton.addEventListener('click', function(){
     alert("While finding keywords is not an exact science, nouns, verbs, prepositions and conjunctions make good keywords, while pronouns, adjectives, adverbs, and articles do not.");
 });
 
+//turn lights on and off
+let lightsOffButton = document.getElementById("lights_off");
+lightsOffButton.addEventListener('click', function(){
+    if (lightsOff == false){
+        document.body.style.backgroundColor = 'black';
+        document.body.style.color = 'white';
+        document.getElementById('phrase_display').style.color = 'white';
+        lightsOff = true;
+    }
+    else{
+        document.body.style.backgroundColor = 'white';
+        document.body.style.color = 'black';
+        document.getElementById('phrase_display').style.color = 'black';
+        lightsOff = false;
+    }
+});
+
+//the game function
 function game()
 {
-    let phrase = document.getElementById("phrase_display");
     if (questionIndex >= phrases.length - 1){
         console.log("game over");
         phrase.innerHTML = phrases[phrases.length - 1];
         button.disabled = true;
-        scoreDisplay.innerText = 'Your final score is: ' + keywordNum;
+        document.getElementById('timer').innerHTML = "Golden ticket number: " + Math.floor(Math.random() * 10000);
     }
     else{
         let trashwords = document.getElementsByClassName("trashword");
@@ -46,21 +68,24 @@ function game()
         score = 0;
 
         phrase.innerHTML = phrases[questionIndex];
-        let scoreDisplay = document.getElementById("score");
         scoreDisplay.innerText = "There are " + keywords.length + " keywords in this sentence. You have found " + score +" percent of them.";
+        let questionNumber = document.getElementById("question_number");
+        questionNumber.innerText = "This is question " + (questionIndex + 1) + " of " + (phrases.length - 1); 
 
-        timer = setInterval(function(){
-            count--;
-            console.log(count);
-            document.getElementById('timer').innerHTML = "Time left: " + count + " seconds.";
-            if (count == 0){
-                clearInterval(timer);
-                keywordNum = keywords.length;
-                calculateScore(keywords, trashwords, scoreDisplay);
-                phrase.classList.add('disabled');
-            }
-        }, 1000);
-
+        if (questionIndex > 0){
+            timer = setInterval(function(){
+                count--;
+                document.getElementById('timer').innerHTML = "Time left: " + count + " seconds.";
+                if (count == 0){
+                    clearInterval(timer);
+                    keywordNum = keywords.length;
+                    calculateScore(keywords, trashwords, scoreDisplay);
+                    phrase.classList.add('disabled');
+                }
+            }, 1000);
+        }
+        
+        //add a click event listener to each worn in the phrase
         for (let i = 0; i < trashwords.length; i++){
             trashwords[i].addEventListener('click', function(){
                 trashwords[i].style.color = 'red';
@@ -77,6 +102,7 @@ function game()
     }
 }
 
+//calcalates score
 function calculateScore(keywords, trashwords, scoreDisplay){
     score = Math.round(keywordNum / keywords.length * 100);
     scoreDisplay.innerText = "There are " + keywords.length + " keywords in this sentence. You have found " + score +" percent of them.";
@@ -85,6 +111,7 @@ function calculateScore(keywords, trashwords, scoreDisplay){
     }
 }
 
+//functin performed when timer runs out
 function timesUp(trashwords, scoreDisplay){
     clearInterval(timer);
     for (let i = 0; i < trashwords.length; i++){
@@ -94,5 +121,6 @@ function timesUp(trashwords, scoreDisplay){
     button.disabled = false;
     keywordNum = 0;
 }
+
 game();
 

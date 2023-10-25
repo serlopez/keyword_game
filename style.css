@@ -1,12 +1,15 @@
 body {
     font-family: 'Poppins', sans-serif;
     font-family: 'Ubuntu', sans-serif;
+    background-color: white;
+    color: black;
 }
 
 #phrase_display {
     font-family: 'Ubuntu Mono', monospace;
     font-size: 36px;
     font-weight: bold;
+    color: black;
 }
 
 #phrase_display:hover {
